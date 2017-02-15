@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DicTwoApp</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="offline_word">請輸入單詞</string>
+    <string name="online_word">在線查詢</string>
+
+</resources>

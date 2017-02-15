@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="tab3_list">
+        <item>开启小词通知开关</item>
+        <item>检查更新</item>
+        <item>敬请期待2015-10-21</item>
+        <item>敬请期待1</item>
+        <item>敬请期待2</item>
+        <item>敬请期待3</item>
+        <item>敬请期待4</item>
+        <item>敬请期待5</item>
+        <item>敬请期待6</item>
+
+    </string-array>
+
+</resources>
