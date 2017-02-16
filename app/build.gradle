@@ -56,4 +56,6 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.24'
     compile files('libs/okio-1.11.0.jar')
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile files('libs/picasso-2.5.2.jar')
+    compile project(':library_pulltorefresh')
 }

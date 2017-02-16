@@ -12,17 +12,22 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.yqq.dictwoapp.bean.Good;
 
 import org.json.JSONObject;
@@ -36,6 +41,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -50,20 +56,13 @@ import okhttp3.Response;
 public class Tab1Activity extends AppCompatActivity {
     private static final String TAG = Tab1Activity.class.getName();
     String responseJson = null;
+    int page = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab1);
-        TextView channel_name = (TextView) findViewById(R.id.channel_name);
-        //如果你想拿到AndroidManifest中的信息，要通过包管理器 packagename
-        try {
-            String APK_CHANNEL = getPackageManager().getApplicationInfo("com.yqq.dictwoapp",PackageManager.GET_META_DATA).
-                    metaData.getString("APK_CHANNEL");
-            channel_name.setText("渠道："+APK_CHANNEL);//那个标记如何拿到？
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        setPullToRefresh();//TODO day02
+//        okHttp(null);
     }
     /**
      * okHttp联网处理 post,get请求
@@ -73,7 +72,7 @@ public class Tab1Activity extends AppCompatActivity {
      * */
     public void okHttp(View view) {
         try {
-            run("http://atp.fulishe.com/ClientApi/category.php?returnformat=json&act=search_category_goods_list&c_id=35&page_num=10&page=1&encoding=utf8&api_version=1.0&debug=true");
+            run("http://atp.fulishe.com/ClientApi/category.php?returnformat=json&act=search_category_goods_list&c_id=35&page_num=10&page="+page+"&encoding=utf8&api_version=1.0&debug=true");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,19 +82,10 @@ public class Tab1Activity extends AppCompatActivity {
      .string(): This returns your response.
      * */
     OkHttpClient client = new OkHttpClient();//1 client
-    String run(String url) throws IOException {
+    void run(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();//2 newRequest get请求
-
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                //同步
-////        Response response = client.newCall(request).execute();
-//                runOnUiThread();
-//            }
-//        }.start();
         //异步
         client.newCall(request).enqueue(new Callback() {//3 call
             @Override
@@ -106,10 +96,10 @@ public class Tab1Activity extends AppCompatActivity {
             @Override//4 success
             public void onResponse(Call call, Response response) throws IOException {
                 Log.d(TAG,responseJson=response.body().string());
+                //加载商品列表到下拉刷新列表当中
+                fastJson(null);
             }
         });
-//        return response.body().string();
-        return null;
     }
     /**
      * fastJson框架的使用
@@ -128,11 +118,56 @@ com.alibaba.fastjson.JSONObject jsonObject =
 JSONArray jsonArray = jsonObject.getJSONObject("info").getJSONArray("goods");
 goods = JSON.parseObject(jsonArray.toJSONString(),new TypeReference<List<Good>>() {});
 Log.i(TAG,goods.toString());
-    }
+        //TODO day02
+        for (Good good:goods){
+            mListItems.add(good.toString());
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+                // Call onRefreshComplete when the list has been refreshed.
+                mPullRefreshGridView.onRefreshComplete();
+            }
+        });
 
+    }
+    PullToRefreshGridView mPullRefreshGridView;
+    GridView mGridView;
+    LinkedList mListItems;
+    ArrayAdapter mAdapter;
+    private void setPullToRefresh() {
+        mPullRefreshGridView = (PullToRefreshGridView) findViewById(R.id.pull_refresh_grid);
+        mGridView = mPullRefreshGridView.getRefreshableView();
+
+        // Set a listener to be invoked when the list should be refreshed.
+        mPullRefreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+
+            @Override//uptoDown
+            public void refresh(PullToRefreshBase<GridView> refreshView) {
+                Toast.makeText(Tab1Activity.this, "Pull Down!", Toast.LENGTH_SHORT).show();
+                page = 1;
+                mListItems.clear();
+                okHttp(null);
+            }
+
+            @Override//downToUP
+            public void more(PullToRefreshBase<GridView> refreshView) {
+                Toast.makeText(Tab1Activity.this, "Pull Up!", Toast.LENGTH_SHORT).show();
+                page = page+1;
+                okHttp(null);
+            }
+        });
+
+
+        mListItems = new LinkedList<String>();
+
+        TextView tv = new TextView(this);
+        tv.setGravity(Gravity.CENTER);
+        tv.setText("Empty View, Pull Down/Up to Add Items");
+        mPullRefreshGridView.setEmptyView(tv);
+
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListItems);
+        mGridView.setAdapter(mAdapter);
+    }
 }
-/**
- * 确定XXX登陆
- * 给予YYYY权限
- *
- */

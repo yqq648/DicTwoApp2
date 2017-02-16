@@ -5,23 +5,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical">
-
-    <Button
-        android:text="okHttp"
-        android:onClick="okHttp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:text="fastJson"
-        android:onClick="fastJson"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/channel_name"
-        android:text="渠道："
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         />
-
+    <!-- The PullToRefreshGridView replaces a standard GridView widget. -->
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pull_refresh_grid"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:numColumns="2"
+        android:verticalSpacing="1dp"
+        android:horizontalSpacing="1dp"
+        android:columnWidth="100dp"
+        android:stretchMode="columnWidth"
+        android:gravity="fill"
+        ptr:ptrMode="both"
+        ptr:ptrDrawable="@mipmap/ic_launcher" />
 </LinearLayout>
