@@ -4,6 +4,9 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
+
+
+
     defaultConfig {
         applicationId "com.yqq.dictwoapp"
         minSdkVersion 15
@@ -11,6 +14,31 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    //多渠道打包 设置CHANNEL_NAME变量的值
+    productFlavors {
+        huawei {
+            manifestPlaceholders = [CHANNEL_NAME: "huawei"]
+//            applicationId 'com.tencent.bugly.hotfix.huawei'
+        }
+        baidu {
+            manifestPlaceholders = [CHANNEL_NAME: "baidu"]
+//            applicationId 'com.tencent.bugly.hotfix.baidu'
+        }
+        xiaomi {
+            manifestPlaceholders = [CHANNEL_NAME: "xiaomi"]
+//            applicationId 'com.tencent.bugly.hotfix.xiaomi'
+        }
+        _360 {
+            manifestPlaceholders = [CHANNEL_NAME: "\"360\""]
+//            applicationId 'com.tencent.bugly.hotfix.360'
+        }
+        qq {
+            manifestPlaceholders = [CHANNEL_NAME: "qq"]
+//            applicationId 'com.tencent.bugly.hotfix.qq'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

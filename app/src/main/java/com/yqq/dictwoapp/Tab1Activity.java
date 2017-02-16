@@ -2,6 +2,7 @@ package com.yqq.dictwoapp;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -53,6 +54,16 @@ public class Tab1Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab1);
+        TextView channel_name = (TextView) findViewById(R.id.channel_name);
+        //如果你想拿到AndroidManifest中的信息，要通过包管理器 packagename
+        try {
+            String APK_CHANNEL = getPackageManager().getApplicationInfo("com.yqq.dictwoapp",PackageManager.GET_META_DATA).
+                    metaData.getString("APK_CHANNEL");
+            channel_name.setText("渠道："+APK_CHANNEL);//那个标记如何拿到？
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
     /**
      * okHttp联网处理 post,get请求
@@ -120,3 +131,8 @@ Log.i(TAG,goods.toString());
     }
 
 }
+/**
+ * 确定XXX登陆
+ * 给予YYYY权限
+ *
+ */
