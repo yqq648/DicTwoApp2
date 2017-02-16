@@ -58,6 +58,7 @@ public class Tab1Activity extends AppCompatActivity {
      * okHttp联网处理 post,get请求
      * 用于Android和Java应用程序的HTTP和HTTP / 2客户端。
      * https://github.com/square/okhttp
+     * http://square.github.io/okhttp/
      * */
     public void okHttp(View view) {
         try {
@@ -70,21 +71,28 @@ public class Tab1Activity extends AppCompatActivity {
      * .toString(): This returns your object in string format.
      .string(): This returns your response.
      * */
-    OkHttpClient client = new OkHttpClient();
+    OkHttpClient client = new OkHttpClient();//1 client
     String run(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
-                .build();
-        //同步
-//        Response response = client.newCall(request).execute();
+                .build();//2 newRequest get请求
+
+//        new Thread(){
+//            @Override
+//            public void run() {
+//                //同步
+////        Response response = client.newCall(request).execute();
+//                runOnUiThread();
+//            }
+//        }.start();
         //异步
-        client.newCall(request).enqueue(new Callback() {
+        client.newCall(request).enqueue(new Callback() {//3 call
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG,"error:"+e.getMessage());
             }
 
-            @Override
+            @Override//4 success
             public void onResponse(Call call, Response response) throws IOException {
                 Log.d(TAG,responseJson=response.body().string());
             }
@@ -94,16 +102,21 @@ public class Tab1Activity extends AppCompatActivity {
     }
     /**
      * fastJson框架的使用
-     * 将json字符串转换为java对象
-     * 将java对象转换为json字符串
+     * 将json字符串转换为java对象   1  JSON.parseObject(jsonStr,Class)
+     * 将java对象转换为json字符串   2
      * https://github.com/alibaba/fastjson
+     * https://github.com/alibaba/fastjson/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98
+     * JSON
+     *
      * */
     public void fastJson(View view) {
-        List<Good> goods = null;
-        com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(responseJson, com.alibaba.fastjson.JSONObject.class);
-        JSONArray jsonArray = jsonObject.getJSONObject("info").getJSONArray("goods");
-        goods = JSON.parseObject(jsonArray.toJSONString(),new TypeReference<List<Good>>() {});
-        Log.i(TAG,goods.toString());
+List<Good> goods = null;
+        //将json字符串转换为java对象
+com.alibaba.fastjson.JSONObject jsonObject =
+        JSON.parseObject(responseJson, com.alibaba.fastjson.JSONObject.class);
+JSONArray jsonArray = jsonObject.getJSONObject("info").getJSONArray("goods");
+goods = JSON.parseObject(jsonArray.toJSONString(),new TypeReference<List<Good>>() {});
+Log.i(TAG,goods.toString());
     }
 
 }
