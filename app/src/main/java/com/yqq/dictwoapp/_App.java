@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-//主界面
 public class _App extends Application {
 	private String appId = "cc723fc721dea358";
 	private String appSecret = "8a69a5d21d75bfb8";
