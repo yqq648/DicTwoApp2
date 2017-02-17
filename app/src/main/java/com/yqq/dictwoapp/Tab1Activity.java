@@ -127,7 +127,7 @@ Log.i(TAG,goods.toString());
             public void run() {
                 mAdapter.notifyDataSetChanged();
                 // Call onRefreshComplete when the list has been refreshed.
-                mPullRefreshGridView.onRefreshComplete();
+                mPullRefreshGridView.onRefreshComplete();//下拉刷新完毕
             }
         });
 
@@ -146,8 +146,8 @@ Log.i(TAG,goods.toString());
             @Override//uptoDown
             public void refresh(PullToRefreshBase<GridView> refreshView) {
                 Toast.makeText(Tab1Activity.this, "Pull Down!", Toast.LENGTH_SHORT).show();
-                page = 1;
-                mListItems.clear();
+                page = 1;//
+                mListItems.clear();//清空列表
                 okHttp(null);
             }
 
