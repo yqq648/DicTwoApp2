@@ -4,9 +4,6 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
-
-
-
     defaultConfig {
         applicationId "com.yqq.dictwoapp"
         minSdkVersion 15
@@ -53,9 +50,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile files('libs/YoumiSdk_v5.3.3_2015-10-10.jar')
-    compile 'com.alibaba:fastjson:1.2.24'
     compile files('libs/okio-1.11.0.jar')
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile files('libs/picasso-2.5.2.jar')
     compile project(':library_pulltorefresh')
+    compile files('libs/fastjson-1.2.24.jar')
 }
