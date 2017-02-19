@@ -10,29 +10,35 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        //激光推送
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a','x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "2ebcfc05f73d957d08b0b990", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
 
     //多渠道打包 设置CHANNEL_NAME变量的值
     productFlavors {
         huawei {
             manifestPlaceholders = [CHANNEL_NAME: "huawei"]
-//            applicationId 'com.tencent.bugly.hotfix.huawei'
         }
         baidu {
             manifestPlaceholders = [CHANNEL_NAME: "baidu"]
-//            applicationId 'com.tencent.bugly.hotfix.baidu'
         }
         xiaomi {
             manifestPlaceholders = [CHANNEL_NAME: "xiaomi"]
-//            applicationId 'com.tencent.bugly.hotfix.xiaomi'
         }
         _360 {
             manifestPlaceholders = [CHANNEL_NAME: "\"360\""]
-//            applicationId 'com.tencent.bugly.hotfix.360'
         }
         qq {
             manifestPlaceholders = [CHANNEL_NAME: "qq"]
-//            applicationId 'com.tencent.bugly.hotfix.qq'
         }
     }
 
@@ -55,4 +61,7 @@ dependencies {
     compile files('libs/picasso-2.5.2.jar')
     compile project(':library_pulltorefresh')
     compile files('libs/fastjson-1.2.24.jar')
+    //激光推送
+    compile 'cn.jiguang.sdk:jpush:3.0.0'  // 此处以JPush 3.0.0 版本为例例。
+    compile 'cn.jiguang.sdk:jcore:1.0.0'  // 此处以JCore 1.0.0 版本为例例。
 }

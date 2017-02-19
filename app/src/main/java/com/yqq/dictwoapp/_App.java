@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import cn.jpush.android.api.JPushInterface;
+
 public class _App extends Application {
 	private String appId = "cc723fc721dea358";
 	private String appSecret = "8a69a5d21d75bfb8";
@@ -27,11 +30,19 @@ public class _App extends Application {
 
 //	private _App() {
 //	}
-
+	/**
+	 * [JPushInterface] action:init
+	 .......
+	 [PushService] Login succeed!
+	 */
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		//激光todo 初始化和设置debug
+		JPushInterface.setDebugMode(true);
+		JPushInterface.init(this);
+		//
 		ourInstance = this;
 		new Thread(){
 			@Override
