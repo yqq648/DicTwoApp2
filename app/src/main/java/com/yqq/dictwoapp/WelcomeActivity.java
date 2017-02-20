@@ -2,7 +2,10 @@ package com.yqq.dictwoapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -11,6 +14,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +39,7 @@ public class WelcomeActivity extends AppCompatActivity {
             ImageView imageView = new ImageView(this);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setImageResource(R.drawable.wel_into2);
+            setTuisong(imageView);
             Animation alaAnimation = new AlphaAnimation(1.0f,0.3f);
             alaAnimation.setDuration(1000);
             alaAnimation.setFillAfter(true);//保持动画最终的状态
@@ -59,6 +64,20 @@ public class WelcomeActivity extends AppCompatActivity {
             setContentView(imageView);
         }
     }
+    //推送过来的图片，立刻被广播保存，我们欢迎界面检查有没有，并且设置上去
+    private void setTuisong(ImageView imageView) {
+        File imgFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"aa.jpg");
+        if (imgFile.exists()){
+//            if(时间>2017/2/13&&时间<2017/2/15){
+//                //
+//            }
+            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            if (bitmap!=null){
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
+
     /** adapter */
     class MyFragmentAdapter extends FragmentPagerAdapter{
 
